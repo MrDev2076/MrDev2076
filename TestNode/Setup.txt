@@ -1,0 +1,40 @@
+
+Server Side 
+    #==> server
+
+    npm init -y
+    npm install express mysql cors nodemon cookie-parser jsonwebtoken bcrypt
+
+Front End
+
+    #==> frontend
+
+    npm install bootstrap axios react-router-dom
+
+
+
+Auth :
+
+ {auth ? (
+            <div className="auth-section">
+              
+              <li><Link to="/AdminDashboard" className="btn btn-primary"> <span className="text-light">{name}'s</span> Admin Panel</Link></li>
+              <li className="btn btn-outline-danger" onClick={handleDelete}>Logout</li>
+            </div>
+          ) : (
+            <li><Link to="/login" className="btn btn-primary">Login</Link></li>
+          )}
+
+
+
+ Auth :         {auth ? (
+            <div>
+              
+            </div>
+          ) : (
+            <div>
+              <h3 className="text-danger">{message}</h3>
+              <h3>Kindly Login to continue</h3>
+              <Link to="/login" className="btn btn-primary">Login</Link>
+            </div>
+          )}

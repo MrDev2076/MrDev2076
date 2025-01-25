@@ -1,0 +1,164 @@
+/* General styling */
+body {
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  height: 100vh;
+  margin: 0;
+  font-family: "Arial", sans-serif;
+}
+
+/* Home Page */
+.home-container {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  height: 100vh; /* Full viewport height */
+  background-color: #f8f9fa; /* Light background */
+}
+
+.content-box {
+/* Set a max width for the content */
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Buttons */
+.btn-primary {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.btn-outline-danger {
+  background: none;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease, background 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+  color: white;
+  background: #dc3545;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 1rem 2rem;
+  color: #fff;
+}
+
+.navbar-logo a {
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  margin: 0 1rem;
+}
+
+.navbar-item a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-item a:hover {
+  color: #ffa500;
+}
+
+.navbar-item a.active {
+  color: #ffa500;
+  font-weight: bold;
+}
+
+/* Register Page */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.register-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 30px 40px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.register-card h2 {
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #343a40;
+  text-align: left;
+}
+
+.form-label {
+  font-weight: bold;
+  color: #495057;
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  padding: 10px;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 5px rgba(128, 189, 255, 0.5);
+}
+
+.form-divider {
+  margin: 20px 0;
+  border-top: 1px solid #e9ecef;
+}
+
+.alert-info {
+  margin-bottom: 20px;
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+  border-radius: 5px;
+  padding: 10px;
+}
