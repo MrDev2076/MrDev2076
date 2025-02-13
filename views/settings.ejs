@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carapp Settings - Language Preferences</title>
+  <link rel="icon" href="https://img.freepik.com/premium-vector/pin-car-parking-logo-template-premium-vector_316488-5081.jpg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-600 p-4 shadow-md">
+    <div class="max-w-screen-xl px-16 mx-auto flex justify-between items-center">
+      <h1 class="text-white text-2xl font-semibold"><a href="/" class="text-white">Parkwise app</a></h1>
+      <div class="flex space-x-4">
+        <a href="/profile" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Profile</a>
+        <a href="/settings" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Settings</a>
+        <% if (user && user.role !== 'user') { %>  
+          <a href="/admin" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Admin</a>
+        <% } %>
+        <a href="/logout" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Settings Section -->
+  <section class="max-w-screen-xl px-20 py-8 mx-auto">
+    <div class="bg-gray-800 shadow-md rounded-lg p-8 w-full">
+      <h1 class="text-2xl font-semibold text-white mb-6">Extraction Preferences</h1>
+    
+      <form action="/settings" method="POST" class="space-y-6">
+        <div>
+          
+        </div>
+
+        <div>
+          <button type="submit" class="bg-orange-600 text-white py-3 px-6 rounded-md hover:bg-orange-700 transition-colors w-full">Save Preferences</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</body>
+</html>

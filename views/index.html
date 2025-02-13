@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Number Plate Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center h-screen">
+
+    <div class="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 class="text-xl font-semibold mb-4 text-center">Upload Car Image</h2>
+        <input type="file" id="fileInput" class="mb-4 w-full border p-2 rounded">
+        <button onclick="uploadImage()" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            Scan Number Plate
+        </button>
+        <div id="result" class="mt-4 text-center font-medium"></div>
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select an image");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("carImage", fileInput.files[0]);
+
+            const response = await fetch("http://localhost:5000/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerHTML = `
+                <p class="text-green-600">Detected Plate: <b>${data.licensePlate}</b></p>
+               
+            `;
+        }
+    </script>
+
+</body>
+</html>

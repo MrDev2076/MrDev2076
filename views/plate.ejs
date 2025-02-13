@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carapp - Plate Scanner</title>
+    <link rel="icon" href="https://img.freepik.com/premium-vector/pin-car-parking-logo-template-premium-vector_316488-5081.jpg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-600 p-4 shadow-md">
+      <div class="max-w-screen-xl px-16 mx-auto flex justify-between items-center">
+        <h1 class="text-white text-2xl font-semibold"><a href="/" class="text-white">Parkwise app</a></h1>
+        <div class="flex space-x-4">
+          <a href="/profile" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Profile</a>
+          <a href="/settings" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Settings</a>
+          <% if (user && user.role !== 'user') { %>  
+            <a href="/admin" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Admin</a>
+          <% } %>
+          <a href="/logout" class="text-white text-sm bg-gray-400 duration-300 ease-in-out hover:bg-orange-500 px-4 py-2 rounded">Logout</a>
+        </div>
+      </div>
+    </nav>
+    
+    <div class="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 class="text-xl font-semibold mb-4 text-center">Upload Car Image</h2>
+        <input type="file" id="fileInput" class="mb-4 w-full border p-2 rounded">
+        <button onclick="uploadImage()" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            Scan Number Plate
+        </button>
+        <div id="result" class="mt-4 text-center font-medium"></div>
+    </div>
+
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select an image");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("carImage", fileInput.files[0]);
+
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerHTML = `
+                <p class="text-green-600">Detected Plate: <b>${data.licensePlate}</b></p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
