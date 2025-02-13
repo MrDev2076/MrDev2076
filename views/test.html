@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Detection (Haar Cascade)</title>
+    <script async src="https://docs.opencv.org/4.x/opencv.js" onload="onOpenCVLoaded()"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen">
+    <h1 class="text-3xl font-bold mb-6">Face Detection (Haar Cascade)</h1>
+
+    <div class="flex space-x-4 mb-4">
+        <button id="startLive" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded">Start Live Camera</button>
+        <input type="file" id="uploadVideo" accept="video/*" class="hidden">
+        <label for="uploadVideo" class="px-4 py-2 bg-green-500 hover:bg-green-600 rounded cursor-pointer">Upload Video</label>
+        <button id="stopVideo" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded hidden">Stop Video</button>
+    </div>
+
+    <div class="relative">
+        <video id="video" autoplay muted class="rounded shadow-lg hidden"></video>
+        <canvas id="canvas" class="absolute top-0 left-0 hidden"></canvas>
+    </div>
+
+    <script>
+        let video = document.getElementById('video');
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
+        let startLiveBtn = document.getElementById('startLive');
+        let uploadVideoInput = document.getElementById('uploadVideo');
+        let stopVideoBtn = document.getElementById('stopVideo');
+
+        let stream = null;
+        let faceCascade = null;
+        let detecting = false;
+        let opencvLoaded = false;
+
+        function onOpenCVLoaded() {
+            console.log("OpenCV Loaded!");
+            opencvLoaded = true;
+            loadHaarCascade();
+        }
+
+        async function loadHaarCascade() {
+            try {
+                console.log("Loading Haar Cascade...");
+                let response = await fetch("haarcascade_frontalface_default.xml");
+                let data = await response.arrayBuffer();
+                cv.FS_createDataFile("/", "haarcascade_frontalface_default.xml", new Uint8Array(data), true, false, false);
+                faceCascade = new cv.CascadeClassifier();
+                faceCascade.load("haarcascade_frontalface_default.xml");
+                console.log("Haar Cascade Loaded Successfully!");
+            } catch (error) {
+                console.error("Error loading Haar Cascade:", error);
+            }
+        }
+
+        function detectFaces() {
+            if (!faceCascade) {
+                console.error("Face cascade not loaded correctly.");
+                return;
+            }
+            console.log("Starting face detection...");
+            detecting = true;
+
+            function processFrame() {
+                if (!detecting) return;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                let mat = cv.imread(canvas);
+                let gray = new cv.Mat();
+                cv.cvtColor(mat, gray, cv.COLOR_RGBA2GRAY, 0);
+                let faces = new cv.RectVector();
+                let size = new cv.Size(30, 30);
+                faceCascade.detectMultiScale(gray, faces, 1.1, 4, 0, size, size);
+
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 3;
+                for (let i = 0; i < faces.size(); ++i) {
+                    let face = faces.get(i);
+                    ctx.strokeRect(face.x, face.y, face.width, face.height);
+                    console.log("Face Detected at:", face.x, face.y, face.width, face.height);
+                }
+                mat.delete();
+                gray.delete();
+                faces.delete();
+                requestAnimationFrame(processFrame);
+            }
+            requestAnimationFrame(processFrame);
+        }
+
+        startLiveBtn.addEventListener('click', async () => {
+            if (stream) return;
+            try {
+                console.log("Starting live camera...");
+                stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+                video.srcObject = stream;
+                video.classList.remove('hidden');
+                canvas.classList.remove('hidden');
+                stopVideoBtn.classList.remove('hidden');
+                video.onloadedmetadata = () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                };
+                detectFaces();
+            } catch (error) {
+                console.error("Error accessing the camera: ", error);
+            }
+        });
+
+        uploadVideoInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            console.log("Uploading video...");
+            const url = URL.createObjectURL(file);
+            video.src = url;
+            video.classList.remove('hidden');
+            canvas.classList.remove('hidden');
+            stopVideoBtn.classList.remove('hidden');
+            video.onloadeddata = () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                detectFaces();
+            };
+        });
+
+        stopVideoBtn.addEventListener('click', () => {
+            console.log("Stopping video...");
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            video.srcObject = null;
+            video.pause();
+            video.classList.add('hidden');
+            canvas.classList.add('hidden');
+            stopVideoBtn.classList.add('hidden');
+            detecting = false;
+        });
+    </script>
+</body>
+</html>
